@@ -27,6 +27,7 @@ public class AudioImage extends AppCompatActivity {
        // ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.sub), (v, insets) -> );
        //     Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
         //    v.setPadding(systemBars.left, systemBars.top, systemBars.right)
+        // return insets
 
         Intent it = getIntent();
         String tag = it.getStringExtra("it_tag");
@@ -47,9 +48,22 @@ public class AudioImage extends AppCompatActivity {
         String imageFileName = res.getString(imageFileNameId);
         int imageId = res.getIdentifier(imageFileName, "drawable", getPackageName());
         song_image.setImageResource(imageId);
+
+        int audioFileNameId = res.getIdentifier("audio"+ tag, "string", getPackageName());
+        String audioFileName = res.getString(audioFileNameId);
+        int audioId = res.getIdentifier(audioFileName, "raw", getPackageName());
+
+        np = MediaPlayer.create(this, audioId);
+        np.setLooping(true);
+        np.start();
+
     }
 
     public void goBack(View view) {
+        if (np.isPlaying()) {
+            np.stop();
+            np.release();
+        }
         finish();
 
     }
